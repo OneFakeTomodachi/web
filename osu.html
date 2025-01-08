@@ -1418,6 +1418,8 @@
                             </div>
                         </div>
                     </div>
+                    # Osu API User Statistics
+
                     <section>
                         <hr id="divider02" class="style1 full">
                         <h2 id="text02">
@@ -1425,29 +1427,54 @@
                         </h2>
                         <h2 id="text03">Input Rank: </h2>
                         <input type="number" id="input-rank" name="input-rank" placeholder="Enter Rank" />
-                        <p>-&gt; {output}</p>
+                        <p id="output-rank-to-pp">-&gt; {output}</p>
                         <hr id="divider01" class="style1 full">
                         <h2 id="text04">
                             <em>pp -&gt;Rank</em>
                         </h2>
                         <h2 id="text01">Input pp: </h2>
                         <input type="number" id="input-pp" name="input-pp" placeholder="Enter PP" />
-                        <p>-&gt; {output}</p>
+                        <p id="output-pp-to-rank">-&gt; {output}</p>
                     </section>
-        
+
                     <section>
                         <hr id="divider04" class="style1 full">
                         <h2 id="text05">User Statistics</h2>
                         <input type="text" id="user-statistics" name="user-statistics" placeholder="Enter Username" />
+                        <button id="fetch-user-stats">Fetch Stats</button>
                         <h2 id="text06">
                             Profile name (as link)<br>
-                            profile rank: {rank}<br>
-                            pp: {pp}<br>
-                            Plays: {plays}<br>
-                            Accuracy: {accuracy}<br>
-                            Country: {country}<br>Level: {level}
+                            profile rank: <span id="rank">{rank}</span><br>
+                            pp: <span id="pp">{pp}</span><br>
+                            Plays: <span id="plays">{plays}</span><br>
+                            Accuracy: <span id="accuracy">{accuracy}</span><br>
+                            Country: <span id="country">{country}</span><br>
+                            Level: <span id="level">{level}</span>
                         </h2>
                     </section>
+
+                    <script>
+                        document.getElementById('fetch-user-stats').addEventListener('click', function() {
+                            const username = document.getElementById('user-statistics').value;
+                            fetch(`https://osu.ppy.sh/api/get_user?u=${username}&k=YOUR_API_KEY`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.length > 0) {
+                                        const user = data[0];
+                                        document.getElementById('rank').innerText = user.rank;
+                                        document.getElementById('pp').innerText = user.pp_raw;
+                                        document.getElementById('plays').innerText = user.playcount;
+                                        document.getElementById('accuracy').innerText = user.accuracy;
+                                        document.getElementById('country').innerText = user.country;
+                                        document.getElementById('level').innerText = user.level;
+                                    } else {
+                                        alert('User not found');
+                                    }
+                                })
+                                .catch(error => console.error('Error fetching user data:', error));
+                        });
+                    </script>
+
                     <hr id="divider03" class="style1 full">
                     <ul id="buttons01" class="buttons">
                         <li>
