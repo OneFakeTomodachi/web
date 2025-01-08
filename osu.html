@@ -1427,14 +1427,14 @@
                         </h2>
                         <h2 id="text03">Input Rank: </h2>
                         <input type="number" id="input-rank" name="input-rank" placeholder="Enter Rank" />
-                        <p id="output-rank-to-pp">-&gt; {output}</p>
+                        <p id="output-rank-to-pp">-&gt; </p>
                         <hr id="divider01" class="style1 full">
                         <h2 id="text04">
                             <em>pp -&gt;Rank</em>
                         </h2>
                         <h2 id="text01">Input pp: </h2>
                         <input type="number" id="input-pp" name="input-pp" placeholder="Enter PP" />
-                        <p id="output-pp-to-rank">-&gt; {output}</p>
+                        <p id="output-pp-to-rank">-&gt; </p>
                     </section>
 
                     <section>
@@ -1443,35 +1443,56 @@
                         <input type="text" id="user-statistics" name="user-statistics" placeholder="Enter Username" />
                         <button id="fetch-user-stats">Fetch Stats</button>
                         <h2 id="text06">
+                            Country: <span id="country">{country}</span><br>
                             profile rank: <span id="rank">{rank}</span><br>
                             pp: <span id="pp">{pp}</span><br>
                             Plays: <span id="plays">{plays}</span><br>
                             Accuracy: <span id="accuracy">{accuracy}</span><br>
-                            Country: <span id="country">{country}</span><br>
                             Level: <span id="level">{level}</span>
                         </h2>
                     </section>
 
                     <script>
-                        document.getElementById('fetch-user-stats').addEventListener('click', function() {
-                            const username = document.getElementById('user-statistics').value;
-                            fetch(`https://osu.ppy.sh/api/get_user?u=${username}&k=d55a2e6e8677c3471f7f1af7091018e3f315a4a1`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.length > 0) {
-                                        const user = data[0];
-                                        document.getElementById('rank').innerText = user.rank;
-                                        document.getElementById('pp').innerText = user.pp_raw;
-                                        document.getElementById('plays').innerText = user.playcount;
-                                        document.getElementById('accuracy').innerText = user.accuracy;
-                                        document.getElementById('country').innerText = user.country;
-                                        document.getElementById('level').innerText = user.level;
-                                    } else {
-                                        alert('User not found');
-                                    }
-                                })
-                                .catch(error => console.error('Error fetching user data:', error));
+                        async function fetchUserData(username) {
+                            const response = await fetch(`https://osu.ppy.sh/api/get_user?k=YOUR_API_KEY&u=${username}`);
+                            const data = await response.json();
+                            return data[0];
+                        }
+                    
+                        document.getElementById('user-statistics').addEventListener('change', async function() {
+                            const username = this.value;
+                            const userData = await fetchUserData(username);
+                            document.getElementById('rank').innerText = userData.pp_rank;
+                            document.getElementById('pp').innerText = userData.pp_raw;
+                            document.getElementById('plays').innerText = userData.playcount;
+                            document.getElementById('accuracy').innerText = userData.accuracy;
+                            document.getElementById('country').innerText = userData.country;
+                            document.getElementById('level').innerText = userData.level;
                         });
+                    
+                        document.getElementById('input-rank').addEventListener('input', function() {
+                            const rank = this.value;
+                            // Convert rank to pp logic here
+                            const pp = convertRankToPP(rank); // Placeholder function
+                            document.getElementById('output-rank-to-pp').innerText = `-> ${pp}`;
+                        });
+                    
+                        document.getElementById('input-pp').addEventListener('input', function() {
+                            const pp = this.value;
+                            // Convert pp to rank logic here
+                            const rank = convertPPToRank(pp); // Placeholder function
+                            document.getElementById('output-pp-to-rank').innerText = `-> ${rank}`;
+                        });
+                    
+                        function convertRankToPP(rank) {
+                            // Placeholder conversion logic
+                            return rank * 10; // Example conversion
+                        }
+                    
+                        function convertPPToRank(pp) {
+                            // Placeholder conversion logic
+                            return pp / 10; // Example conversion
+                        }
                     </script>
 
                     <hr id="divider03" class="style1 full">
