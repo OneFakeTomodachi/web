@@ -1443,7 +1443,6 @@
                         <input type="text" id="user-statistics" name="user-statistics" placeholder="Enter Username" />
                         <button id="fetch-user-stats">Fetch Stats</button>
                         <h2 id="text06">
-                            Profile name (as link)<br>
                             profile rank: <span id="rank">{rank}</span><br>
                             pp: <span id="pp">{pp}</span><br>
                             Plays: <span id="plays">{plays}</span><br>
@@ -1456,7 +1455,7 @@
                     <script>
                         document.getElementById('fetch-user-stats').addEventListener('click', function() {
                             const username = document.getElementById('user-statistics').value;
-                            fetch(`https://osu.ppy.sh/api/get_user?u=${username}&k=YOUR_API_KEY`)
+                            fetch(`https://osu.ppy.sh/api/get_user?u=${username}&k=d55a2e6e8677c3471f7f1af7091018e3f315a4a1`)
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.length > 0) {
